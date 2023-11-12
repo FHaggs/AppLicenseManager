@@ -1,5 +1,8 @@
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,8 +27,9 @@ public class App {
     private JButton btAdd;
 
     public App(){
+        // Add outras tabelas
         catApps = new CatalogoAplicativos();
-        catApps.loadFromFile();; 
+        catApps.loadFromFile();
     }
 
     public void criaJanela() throws Exception {
@@ -35,6 +39,15 @@ public class App {
 
         JFrame frame = new JFrame("Gestão de aplicativos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Salvar dados antes de sair
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                catApps.saveToFile();
+                frame.dispose();
+            }
+        });
+
 
         JPanel linha1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JScrollPane scrollPane = new JScrollPane(tabela,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
