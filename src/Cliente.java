@@ -48,7 +48,7 @@ public class Cliente {
     }
 
     public void cancelaAssinatura(Assinatura assinatura){
-        assinaturas.remove(assinatura.getCodigoAssinatura());
+       //TODO: Fazer esse metodo
     }
 
 }
