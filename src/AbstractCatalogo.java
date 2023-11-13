@@ -14,12 +14,19 @@ public abstract class AbstractCatalogo<T> {
     public void cadastra(T p) {
         itens.add(p);
     }
+    public List<T> getItens(){
+        return itens;
+    }
 
     public T getProdutoNaLinha(int linha) {
         if (linha >= itens.size()) {
             return null;
         }
         return itens.get(linha);
+    }
+
+    public String getDataFileName(){
+        return dataFileName;
     }
 
     public int getQtdade() {

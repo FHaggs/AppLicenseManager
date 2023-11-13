@@ -1,3 +1,5 @@
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
@@ -23,12 +25,12 @@ public class App {
     private JTextField tfCodigo;
     private JTextField tfNome;
     private JTextField tfPreco;
-    private JComboBox<Aplicativo.SO> cbSo;
+    private JComboBox<Aplicativo.SO> cbSo; // ComboBox dos Sistemas Operacionais
     private JButton btAdd;
 
     public App(){
         // Add outras tabelas
-        catApps = new CatalogoAplicativos();
+        catApps = new CatalogoAplicativos("apps.dat");
         catApps.loadFromFile();
     }
 
@@ -44,6 +46,7 @@ public class App {
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 catApps.saveToFile();
+                // TODO: Salvar todos outros catalogos
                 frame.dispose();
             }
         });
@@ -107,13 +110,22 @@ public class App {
     }
 
     public void adicionaApp(){
-        int codigo = Integer.parseInt(tfCodigo.getText());
-        String nome = tfNome.getText();
-        double preco = Double.parseDouble(tfPreco.getText());
-        Aplicativo.SO so = (Aplicativo.SO)cbSo.getSelectedItem();
-        Aplicativo novo = new Aplicativo(codigo, nome, preco, so);
-        catApps.cadastra(novo);
-        catAppsVM.fireTableDataChanged();
+        try{
+
+            int codigo = Integer.parseInt(tfCodigo.getText());
+            String nome = tfNome.getText();
+            if(nome.isEmpty()){
+                showMessageDialog(null, "Formato inválido, não é permitido criar apps sem nome");
+            }else{
+                double preco = Double.parseDouble(tfPreco.getText());
+                Aplicativo.SO so = (Aplicativo.SO)cbSo.getSelectedItem();
+                Aplicativo novo = new Aplicativo(codigo, nome, preco, so);
+                catApps.cadastra(novo);
+                catAppsVM.fireTableDataChanged();
+            }
+        } catch(NumberFormatException e){
+            showMessageDialog(null, "Formato inválido, tente novamente");
+        }
     }
 
     public static void main(String[] args) throws Exception {
