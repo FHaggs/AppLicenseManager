@@ -1,3 +1,5 @@
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import javax.swing.table.AbstractTableModel;
 
 public class CatalogoClientesViewModel extends AbstractTableModel {
@@ -34,47 +36,40 @@ public class CatalogoClientesViewModel extends AbstractTableModel {
             default: return (Object)"none";
         }
     }
-    /* 
+    
     public boolean isCellEditable(int row, int col)
         { 
-            return false; // TODO: Mudar isso
+            return col == 0 || col == 1 || col == 2; // TODO: Mudar isso
 
         }
 
     public void setValueAt(Object value, int row, int col) {
-        Aplicativo app = aplicativos.getProdutoNaLinha(row);
+        Cliente cliente = clientes.getProdutoNaLinha(row);
         if(col == 0){
-            try{
-                int novoCodigo = Integer.parseInt(value.toString());
-                app.setCodigo(novoCodigo);
-            }catch(NumberFormatException e) {
+            String novoCpf = value.toString();
+            if(novoCpf.isEmpty()){
                 erroDeFormato();
+            }else{
+                cliente.setCpf(novoCpf);
             }
+
         }
 
         if (col == 1) {
-            // Coluna de Nome
-            if(value.toString().isEmpty()){
-                erroDeFormato(); // proibido colocar string vazia
-            }else {
-                app.setNome(value.toString());
+            
+            String novoNome = value.toString();
+            if(novoNome.isEmpty()){
+                erroDeFormato();
+            }else{
+                cliente.setNome(novoNome);
             }
         } else if (col == 2) {
-            // Coluna de Preço
-            try {
-                double novoPreco = Double.parseDouble(value.toString());
-                app.setPreco(novoPreco);
-            } catch (NumberFormatException e) {
+            String novoEmail = value.toString();
+            if(novoEmail.isEmpty()){
                 erroDeFormato();
-
+            }else{
+                cliente.setEmail(novoEmail);
             }
-        }else if(col == 3){
-            if (value instanceof Aplicativo.SO) {
-                app.setSo((Aplicativo.SO) value);
-            } else {
-                // Unreachable
-            }
-
         }
 
         
@@ -82,5 +77,5 @@ public class CatalogoClientesViewModel extends AbstractTableModel {
     }    
     private void erroDeFormato(){
         showMessageDialog(null, "Formato inválido");
-    } */
+    } 
 }

@@ -42,5 +42,24 @@ public class Assinatura {
         return fimVigencia.equals("00/00");
     }
 
+    public String toLineFile(){
+        return codigoAssinatura+","+cliente.getCpf()+","+aplicativo.getCodigo()+","+inicioVigencia+","+fimVigencia;
+    }
+
+    public static Assinatura fromLineFile(String line, CatalogoClientes catClientes, CatalogoAplicativos catApps){
+        String[] tokens = line.split(",");
+        int codigoAssinatura = Integer.parseInt(tokens[0]);
+        String clienteCpf = tokens[1];
+        int codigoAplicativo = Integer.parseInt(tokens[2]);
+        String inicioVigencia = tokens[3];
+        String fimVigencia = tokens[4];
+
+        Cliente cliente = catClientes.getClienteByCpf(clienteCpf);
+        Aplicativo app = catApps.getCodigoAplicativo(codigoAplicativo);
+
+        return new Assinatura(cliente, app, codigoAssinatura, inicioVigencia, fimVigencia);
+
+    }
+
     
 }

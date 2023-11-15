@@ -13,6 +13,9 @@ public class CatalogoClientes extends AbstractCatalogo<Cliente>{
     
     }
 
+    public Cliente getClienteByCpf(String cpf){
+        return (Cliente) getStream().filter(client -> client.getCpf().equals(cpf));
+    }
 
 
     @Override

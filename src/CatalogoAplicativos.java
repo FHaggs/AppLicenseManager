@@ -12,6 +12,10 @@ public class CatalogoAplicativos extends AbstractCatalogo<Aplicativo>{
         super(dataFileName);
     }
 
+    public Aplicativo getCodigoAplicativo(int codigo){
+        return (Aplicativo)getStream().filter(app -> app.getCodigo() == codigo);
+    }
+
     @Override
     public void loadFromFile() {
         Path appsFilePath = Path.of(getDataFileName());
