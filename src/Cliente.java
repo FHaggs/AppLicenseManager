@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.LinkedList;
 
 public class Cliente {
     private String nome;
@@ -8,11 +9,11 @@ public class Cliente {
     private List<Assinatura> assinaturas;
 
     
-    public Cliente(String nome, String cpf, String email, List<Assinatura> assinaturas) {
+    public Cliente(String nome, String cpf, String email) {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
-        this.assinaturas = assinaturas;
+        this.assinaturas = new LinkedList<>();
     }
 
     public String getNome() {
@@ -43,12 +44,24 @@ public class Cliente {
         return assinaturas;
     }
 
-    public void setAssinaturas(List<Assinatura> assinaturas) {
-        this.assinaturas = assinaturas;
+    public void setAssinaturas(Assinatura assinatura) {
+        this.assinaturas.add(assinatura);
     }
 
     public void cancelaAssinatura(Assinatura assinatura){
        //TODO: Fazer esse metodo
+    }
+
+    public String toLineFile(){
+        return cpf+","+nome+","+email;
+    }
+
+    public static Cliente fromLineFile(String line){
+        String[] tokens = line.split(",");
+        String nome = tokens[0];
+        String cpf = tokens[1];
+        String email = tokens[2];
+        return new Cliente(nome, cpf,email);
     }
 
 }
