@@ -44,7 +44,7 @@ public class Cliente {
         return assinaturas;
     }
 
-    public void setAssinaturas(Assinatura assinatura) {
+    public void addAssinaturas(Assinatura assinatura) {
         this.assinaturas.add(assinatura);
     }
 

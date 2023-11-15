@@ -1,4 +1,5 @@
-
+import java.util.List;
+import java.util.LinkedList;
 
 public class Aplicativo {
     public enum SO { Android, IOS }; 
@@ -6,16 +7,24 @@ public class Aplicativo {
     private String nome;
     private double preco;
     private SO so;
+
+    private List<Assinatura> assinaturas;
     
+
     public Aplicativo(int codigo, String nome, double preco, Aplicativo.SO so) {
         this.codigo = codigo;
         this.nome = nome;
         this.preco = preco;
         this.so = so;
+        this.assinaturas = new LinkedList<>();
     }
 
     public int getCodigo() {
         return codigo;
+    }
+
+    public void addAssinatura(Assinatura assinatura){
+        assinaturas.add(assinatura);
     }
 
     public String getNome() {

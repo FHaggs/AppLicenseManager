@@ -14,6 +14,11 @@ public class Assinatura {
         this.inicioVigencia = inicioVigencia;
         this.fimVigencia = "00/00";
     }
+    public void avisarClienteApp(){
+        this.cliente.addAssinaturas(this);
+        this.aplicativo.addAssinatura(this);
+    }
+
     public String getCpf() {
         return cliente.getCpf();
     }
@@ -55,6 +60,7 @@ public class Assinatura {
         String fimVigencia = tokens[4];
 
         Cliente cliente = catClientes.getClienteByCpf(clienteCpf);
+        
         Aplicativo app = catApps.getCodigoAplicativo(codigoAplicativo);
 
         return new Assinatura(cliente, app, codigoAssinatura, inicioVigencia, fimVigencia);
