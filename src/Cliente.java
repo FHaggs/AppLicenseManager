@@ -58,8 +58,8 @@ public class Cliente {
 
     public static Cliente fromLineFile(String line){
         String[] tokens = line.split(",");
-        String nome = tokens[0];
-        String cpf = tokens[1];
+        String cpf = tokens[0];
+        String nome = tokens[1];
         String email = tokens[2];
         return new Cliente(nome, cpf,email);
     }
