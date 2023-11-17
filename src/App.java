@@ -3,6 +3,8 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
-
 
 // Mais informações em: https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
 
@@ -36,7 +37,7 @@ public class App {
     private JComboBox<Aplicativo.SO> cbSo; // ComboBox dos Sistemas Operacionais
     private JButton btAdd;
 
-    public App(){
+    public App() {
         // Add outras tabelas
         catApps = new CatalogoAplicativos("apps.dat");
         catApps.loadFromFile();
@@ -53,9 +54,7 @@ public class App {
         JTable tabelaClientes = new JTable(catClientesVM);
         tabelaClientes.setFillsViewportHeight(true);
 
-
-
-        JFrame frame = new JFrame("Gestão de aplicativos");
+        JFrame frame = new JFrame("GesCatalogoClientesViewModeltão de aplicativos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Salvar dados antes de sair
@@ -68,17 +67,14 @@ public class App {
             }
         });
 
-
         JPanel linha1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JScrollPane scrollPane = new JScrollPane(tabela,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane scrollPane = new JScrollPane(tabela, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         linha1.add(scrollPane);
 
         JPanel jpNovoApp = criaPainelNovoApp();
 
-        
-
-        // Mudar o editor da tabela para poder editar SO com dropdown 
+        // Mudar o editor da tabela para poder editar SO com dropdown
         TableColumn columnSo = tabela.getColumnModel().getColumn(3);
         columnSo.setCellEditor(new SOCellEditor());
         columnSo.setCellRenderer(new SOCellRenderer());
@@ -86,7 +82,7 @@ public class App {
         // Layout
 
         Container contentPane = frame.getContentPane();
-        contentPane.setLayout(new GridLayout(1, 2));  // Use GridLayout with 1 row and 2 columns
+        contentPane.setLayout(new GridLayout(1, 2)); // Use GridLayout with 1 row and 2 columns
 
         // Add the first table (tabela) to the left side
         JPanel leftPanel = new JPanel();
@@ -100,29 +96,45 @@ public class App {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
 
         JScrollPane scrollPaneClientes = new JScrollPane(tabelaClientes,
-        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        // Botao da tabela cliente
+        TableColumn columnVerAssinaturas = tabelaClientes.getColumnModel().getColumn(3);
+        columnVerAssinaturas.setCellRenderer(catClientesVM.new ButtonRenderer());
+        columnVerAssinaturas.setCellEditor(catClientesVM.new ButtonEditor());
+
+        tabelaClientes.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int column = tabelaClientes.getColumnModel().getColumnIndexAtX(e.getX());
+                int row = e.getY() / tabelaClientes.getRowHeight();
+    
+                // Check if the click is within the "Ver assinaturas" column
+                if (row < tabelaClientes.getRowCount() && column == 3) {
+                    // Perform your action here
+                    // For example, show a dialog or perform some action
+                    showMessageDialog(null, "Button clicked in row " + row);
+                }
+            }
+        });
+        
 
         JPanel jpNovoCliente = criaPainelNovoCliente();
 
         rightPanel.add(scrollPaneClientes);
         rightPanel.add(jpNovoCliente);
 
-
         contentPane.add(rightPanel);
 
-
-    
         //
-
 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    public JPanel criaPainelNovoCliente(){
+    public JPanel criaPainelNovoCliente() {
         JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel,BoxLayout.PAGE_AXIS));
+        painel.setLayout(new BoxLayout(painel, BoxLayout.PAGE_AXIS));
 
         JPanel linha1 = new JPanel(new FlowLayout(FlowLayout.LEADING));
         linha1.add(new JLabel("Nome"));
@@ -135,9 +147,9 @@ public class App {
         tfEmailCliente = new JTextField(15);
         linha1.add(tfEmailCliente);
         JPanel linha2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        
+
         btAdd = new JButton("Novo Cliente");
-        btAdd.addActionListener(e->adicionaCliente());
+        btAdd.addActionListener(e -> adicionaCliente());
         linha2.add(btAdd);
 
         painel.add(linha1);
@@ -145,16 +157,15 @@ public class App {
         return painel;
     }
 
-    public void adicionaCliente(){
-    
+    public void adicionaCliente() {
 
         String nome = tfNomeCliente.getText();
         String CPF = tfCPF.getText();
         String email = tfEmailCliente.getText();
-        if(nome.isEmpty() || CPF.isEmpty() || email.isEmpty()){
+        if (nome.isEmpty() || CPF.isEmpty() || email.isEmpty()) {
             showMessageDialog(null, "Formato inválido, não deixe campos em branco");
-        }else{
-            
+        } else {
+
             Cliente novo = new Cliente(nome, CPF, email);
             catClientes.cadastra(novo);
             catClientesVM.fireTableDataChanged();
@@ -162,9 +173,9 @@ public class App {
 
     }
 
-    public JPanel criaPainelNovoApp(){
+    public JPanel criaPainelNovoApp() {
         JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel,BoxLayout.PAGE_AXIS));
+        painel.setLayout(new BoxLayout(painel, BoxLayout.PAGE_AXIS));
 
         JPanel linha1 = new JPanel(new FlowLayout(FlowLayout.LEADING));
         linha1.add(new JLabel("Codigo"));
@@ -180,10 +191,9 @@ public class App {
         linha2.add(new JLabel("Sist. Oper."));
         cbSo = new JComboBox<>(Aplicativo.SO.values());
 
-
         linha2.add(cbSo);
         btAdd = new JButton("Novo App");
-        btAdd.addActionListener(e->adicionaApp());
+        btAdd.addActionListener(e -> adicionaApp());
         linha2.add(btAdd);
 
         painel.add(linha1);
@@ -191,21 +201,21 @@ public class App {
         return painel;
     }
 
-    public void adicionaApp(){
-        try{
+    public void adicionaApp() {
+        try {
 
             int codigo = Integer.parseInt(tfCodigo.getText());
             String nome = tfNome.getText();
-            if(nome.isEmpty()){
+            if (nome.isEmpty()) {
                 showMessageDialog(null, "Formato inválido, não é permitido criar apps sem nome");
-            }else{
+            } else {
                 double preco = Double.parseDouble(tfPreco.getText());
-                Aplicativo.SO so = (Aplicativo.SO)cbSo.getSelectedItem();
+                Aplicativo.SO so = (Aplicativo.SO) cbSo.getSelectedItem();
                 Aplicativo novo = new Aplicativo(codigo, nome, preco, so);
                 catApps.cadastra(novo);
                 catAppsVM.fireTableDataChanged();
             }
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             showMessageDialog(null, "Formato inválido, tente novamente");
         }
     }

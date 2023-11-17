@@ -13,7 +13,6 @@ public class CatalogoAssinaturas extends AbstractCatalogo<Assinatura> {
         super(dataFileName);
         this.apps = apps;
         this.clientes = clientes;
-        
     }
 
     @Override
