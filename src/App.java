@@ -25,7 +25,9 @@ public class App {
     private CatalogoAplicativos catApps;
     private CatalogoClientes catClientes;
     private CatalogoAplicativosViewModel catAppsVM;
+    private CatalogoAssinaturas catAssinaturas;
     private CatalogoClientesViewModel catClientesVM;
+
     private JTextField tfCodigo;
     private JTextField tfNome;
     private JTextField tfPreco;
@@ -37,12 +39,19 @@ public class App {
     private JComboBox<Aplicativo.SO> cbSo; // ComboBox dos Sistemas Operacionais
     private JButton btAdd;
 
+    private JTextField tfCodigoAssinatura;
+    private JTextField tfInicioVigencia;
+    private JComboBox<Aplicativo> appsSelecionaveis;
+    
+
     public App() {
         // Add outras tabelas
         catApps = new CatalogoAplicativos("apps.dat");
         catApps.loadFromFile();
         catClientes = new CatalogoClientes("clientes.dat");
         catClientes.loadFromFile();
+        catAssinaturas = new CatalogoAssinaturas("assinaturas.dat", catApps, catClientes);
+        catAssinaturas.loadFromFile();
     }
 
     public void criaJanela() throws Exception {
@@ -54,7 +63,7 @@ public class App {
         JTable tabelaClientes = new JTable(catClientesVM);
         tabelaClientes.setFillsViewportHeight(true);
 
-        JFrame frame = new JFrame("GesCatalogoClientesViewModeltão de aplicativos");
+        JFrame frame = new JFrame("Gestão de Apps");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Salvar dados antes de sair
@@ -110,9 +119,16 @@ public class App {
     
                 // Check if the click is within the "Ver assinaturas" column
                 if (row < tabelaClientes.getRowCount() && column == 3) {
-                    // Perform your action here
-                    // For example, show a dialog or perform some action
-                    showMessageDialog(null, "Button clicked in row " + row);
+                    // Pegar valor só do cpf
+                    Object cpfValue = tabelaClientes.getValueAt(row, 0);
+                    if (cpfValue != null) { // Evitar bugs
+                        String cpf = cpfValue.toString();
+                        // Pegar o cliente da row
+                        Cliente clienteClicado = catClientes.getClienteByCpf(cpf);
+                        painelAssinatura(clienteClicado);
+                        //clienteClicado.getAssinaturas().stream().forEach(a -> System.out.println(a.getCodigoAssinatura()));
+                    }
+                    
                 }
             }
         });
@@ -130,6 +146,45 @@ public class App {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+    public void painelAssinatura(Cliente clienteClicado){
+        JFrame frame = new JFrame(clienteClicado.getNome());
+        
+        JPanel jpNovaAssinatura = criaPainelNovaAssinatura(clienteClicado);
+        frame.add(jpNovaAssinatura);
+
+        
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+    public JPanel criaPainelNovaAssinatura(Cliente cliente) {
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.PAGE_AXIS));
+
+        JPanel linha1 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        linha1.add(new JLabel("Codigo Assinatura"));
+        tfCodigoAssinatura = new JTextField(10);
+        linha1.add(tfCodigoAssinatura);
+        linha1.add(new JLabel("Início vigência"));
+        tfInicioVigencia = new JTextField(10);
+        linha1.add(tfInicioVigencia);
+        linha1.add(new JLabel("Aplicativo"));
+        appsSelecionaveis = new JComboBox<>();
+        catApps.getStream().forEach(app -> appsSelecionaveis.addItem(app));
+        linha1.add(appsSelecionaveis);
+        JPanel linha2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+
+        btAdd = new JButton("Nova Assinatura");
+        btAdd.addActionListener(e -> adicionaAssinatura());
+        linha2.add(btAdd);
+
+        painel.add(linha1);
+        painel.add(linha2);
+        return painel;
+    }
+    public void adicionaAssinatura(){
+        //String 
     }
 
     public JPanel criaPainelNovoCliente() {

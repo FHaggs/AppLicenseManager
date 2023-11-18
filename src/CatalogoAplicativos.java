@@ -13,7 +13,7 @@ public class CatalogoAplicativos extends AbstractCatalogo<Aplicativo>{
     }
 
     public Aplicativo getCodigoAplicativo(int codigo){
-        return (Aplicativo)getStream().filter(app -> app.getCodigo() == codigo);
+        return getStream().filter(app -> app.getCodigo() == codigo).findFirst().get();
     }
 
     @Override

@@ -23,8 +23,7 @@ public class CatalogoAssinaturas extends AbstractCatalogo<Assinatura> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Replicar as referencias para Clientes e apps 
-        getStream().forEach(assinatura -> assinatura.avisarClienteApp());
+        
     }
 
     @Override

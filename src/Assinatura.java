@@ -13,9 +13,10 @@ public class Assinatura {
         this.codigoAssinatura = codigoAssinatura;
         this.inicioVigencia = inicioVigencia;
         this.fimVigencia = "00/00";
+        avisarClienteApp();
     }
     
-    public void avisarClienteApp(){
+    private void avisarClienteApp(){
         this.cliente.addAssinaturas(this);
         this.aplicativo.addAssinatura(this);
     }

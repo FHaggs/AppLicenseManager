@@ -47,10 +47,9 @@ public class Cliente {
     public void addAssinaturas(Assinatura assinatura) {
         this.assinaturas.add(assinatura);
     }
+    
 
-    public void cancelaAssinatura(Assinatura assinatura){
-       //TODO: Fazer esse metodo
-    }
+    
 
     public String toLineFile(){
         return cpf+","+nome+","+email;

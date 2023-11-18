@@ -67,4 +67,11 @@ public class Aplicativo {
         Aplicativo.SO so = Aplicativo.SO.valueOf(Aplicativo.SO.class, tokens[3]);
         return new Aplicativo(codigo,nome,preco,so);
     }
+
+    public List<Assinatura> getAssinaturas() {
+        return assinaturas;
+    }
+    public String toString(){
+        return nome;
+    }
 }
