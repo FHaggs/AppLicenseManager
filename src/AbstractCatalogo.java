@@ -17,6 +17,9 @@ public abstract class AbstractCatalogo<T> {
     public List<T> getItens(){
         return itens;
     }
+    public void setItens(List<T> itens){
+        this.itens = itens;
+    }
 
     public T getProdutoNaLinha(int linha) {
         if (linha >= itens.size()) {

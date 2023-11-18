@@ -5,9 +5,7 @@ public class Assinatura {
     private String inicioVigencia;
     private String fimVigencia;
     
-    
-    
-    public Assinatura(Cliente cliente, Aplicativo aplicativo, int codigoAssinatura, String inicioVigencia, String fimVigencia) {
+    public Assinatura(Cliente cliente, Aplicativo aplicativo, int codigoAssinatura, String inicioVigencia){
         this.cliente = cliente;
         this.aplicativo = aplicativo;
         this.codigoAssinatura = codigoAssinatura;
@@ -16,11 +14,25 @@ public class Assinatura {
         avisarClienteApp();
     }
     
+    public Assinatura(Cliente cliente, Aplicativo aplicativo, int codigoAssinatura, String inicioVigencia, String fimVigencia) {
+        this.cliente = cliente;
+        this.aplicativo = aplicativo;
+        this.codigoAssinatura = codigoAssinatura;
+        this.inicioVigencia = inicioVigencia;
+        this.fimVigencia = fimVigencia;
+        avisarClienteApp();
+    }
+    
     private void avisarClienteApp(){
         this.cliente.addAssinaturas(this);
         this.aplicativo.addAssinatura(this);
     }
-
+    public Aplicativo getAplicativo(){
+        return aplicativo;
+    }
+    public Cliente getCliente(){
+        return cliente;
+    }
     public String getCpf() {
         return cliente.getCpf();
     }

@@ -72,6 +72,7 @@ public class App {
                 // TODO: Salvar todos outros catalogos
                 catApps.saveToFile();
                 catClientes.saveToFile();
+                catAssinaturas.saveToFile();
                 frame.dispose();
             }
         });
@@ -149,15 +150,31 @@ public class App {
     }
     public void painelAssinatura(Cliente clienteClicado){
         JFrame frame = new JFrame(clienteClicado.getNome());
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         
-        JPanel jpNovaAssinatura = criaPainelNovaAssinatura(clienteClicado);
-        frame.add(jpNovaAssinatura);
+        CatalogoAssinaturas catAssinaturasCliente = new CatalogoAssinaturas(clienteClicado.getAssinaturas());
+        
+
+        CatalogoAssinaturasViewModel catAssinaturasVM = new CatalogoAssinaturasViewModel(catAssinaturasCliente, true);
+        JTable tabelaAssinatura = new JTable(catAssinaturasVM);
+        tabelaAssinatura.setFillsViewportHeight(true);
 
         
+        JScrollPane scrollPane = new JScrollPane(tabelaAssinatura, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        
+
+        JPanel jpNovaAssinatura = criaPainelNovaAssinatura(clienteClicado);
+
+        frame.add(scrollPane);
+        frame.add(jpNovaAssinatura);
+
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+    
+
     public JPanel criaPainelNovaAssinatura(Cliente cliente) {
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.PAGE_AXIS));
@@ -176,15 +193,30 @@ public class App {
         JPanel linha2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
         btAdd = new JButton("Nova Assinatura");
-        btAdd.addActionListener(e -> adicionaAssinatura());
+        btAdd.addActionListener(e -> adicionaAssinatura(cliente));
         linha2.add(btAdd);
 
         painel.add(linha1);
         painel.add(linha2);
         return painel;
     }
-    public void adicionaAssinatura(){
-        //String 
+    public void adicionaAssinatura(Cliente clienteClicado){
+        Aplicativo app = (Aplicativo) appsSelecionaveis.getSelectedItem();
+        try {
+            int codigoAssinatura = Integer.parseInt(tfCodigoAssinatura.getText());
+            String inicioVigencia = tfInicioVigencia.getText();
+            if(inicioVigencia.isEmpty()){
+                showMessageDialog(null, "Formato inválido, não deixe campos em branco");
+            }else{
+                Assinatura novaAssinatura = new Assinatura(clienteClicado, app, codigoAssinatura, inicioVigencia);
+                catAssinaturas.cadastra(novaAssinatura);
+            }
+        }
+        catch (NumberFormatException e){
+            showMessageDialog(null, "Formato inválido");
+        }
+
+
     }
 
     public JPanel criaPainelNovoCliente() {

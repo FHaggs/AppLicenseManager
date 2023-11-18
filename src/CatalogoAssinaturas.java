@@ -1,3 +1,4 @@
+import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +10,13 @@ public class CatalogoAssinaturas extends AbstractCatalogo<Assinatura> {
     private CatalogoAplicativos apps;
     private CatalogoClientes clientes;
     
+    public CatalogoAssinaturas(List<Assinatura> assinaturas){
+        super(null);
+        setItens(assinaturas);
+        this.apps = null;
+        this.clientes = null;
+    }
+
     public CatalogoAssinaturas(String dataFileName, CatalogoAplicativos apps, CatalogoClientes clientes) {
         super(dataFileName);
         this.apps = apps;
