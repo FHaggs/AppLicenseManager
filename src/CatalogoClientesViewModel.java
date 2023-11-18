@@ -67,11 +67,8 @@ public class CatalogoClientesViewModel extends AbstractTableModel {
             }else{
                 cliente.setCpf(novoCpf);
             }
-
         }
-
-        if (col == 1) {
-            
+        if (col == 1) { 
             String novoNome = value.toString();
             if(novoNome.isEmpty()){
                 erroDeFormato();
