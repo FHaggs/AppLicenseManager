@@ -1,21 +1,8 @@
 import static javax.swing.JOptionPane.showMessageDialog;
 
-import java.awt.Component;
-
-import javax.swing.JButton;
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.AbstractCellEditor;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 public class CatalogoClientesViewModel extends AbstractTableModel {
     private CatalogoClientes clientes;
@@ -108,41 +95,5 @@ public class CatalogoClientesViewModel extends AbstractTableModel {
         }
         return getTableCellEditor(row, column);
     }
-        // Implementa um renderer personalizado para o botão
-        class ButtonRenderer extends JButton implements TableCellRenderer {
-            public ButtonRenderer() {
-                setOpaque(true);
-            }
-    
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                setText((value == null) ? "" : value.toString());
-                return this;
-            }
-        }
-        class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-            private JButton button;
-            private String value;
-    
-            public ButtonEditor() {
-                button = new JButton();
-                button.setOpaque(true);
-                button.addActionListener(this);
-            }
-    
-            public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-                this.value = (value == null) ? "" : value.toString();
-                button.setText(this.value);
-                return button;
-            }
-    
-            public Object getCellEditorValue() {
-                return value;
-            }
-    
-            public void actionPerformed(ActionEvent e) {
-                // Unreachable
-                JOptionPane.showMessageDialog(null, "Button clicked in row " + ((JTable) button.getModel()).getRowCount());
-                fireEditingStopped(); // Make sure to tell the editor that editing is finished.
-            }
-        }
+
 }

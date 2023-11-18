@@ -69,7 +69,7 @@ public class App {
         // Salvar dados antes de sair
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                // TODO: Salvar todos outros catalogos
+                
                 catApps.saveToFile();
                 catClientes.saveToFile();
                 catAssinaturas.saveToFile();
@@ -110,8 +110,8 @@ public class App {
 
         // Botao da tabela cliente
         TableColumn columnVerAssinaturas = tabelaClientes.getColumnModel().getColumn(3);
-        columnVerAssinaturas.setCellRenderer(catClientesVM.new ButtonRenderer());
-        columnVerAssinaturas.setCellEditor(catClientesVM.new ButtonEditor());
+        columnVerAssinaturas.setCellRenderer(new ButtonRenderer());
+        columnVerAssinaturas.setCellEditor(new ButtonEditor());
 
         tabelaClientes.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -164,7 +164,7 @@ public class App {
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         
 
-        JPanel jpNovaAssinatura = criaPainelNovaAssinatura(clienteClicado);
+        JPanel jpNovaAssinatura = criaPainelNovaAssinatura(clienteClicado, catAssinaturasVM);
 
         frame.add(scrollPane);
         frame.add(jpNovaAssinatura);
@@ -175,7 +175,7 @@ public class App {
     }
     
 
-    public JPanel criaPainelNovaAssinatura(Cliente cliente) {
+    public JPanel criaPainelNovaAssinatura(Cliente cliente, CatalogoAssinaturasViewModel cAssinaturasVM) {
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.PAGE_AXIS));
 
@@ -193,14 +193,14 @@ public class App {
         JPanel linha2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
         btAdd = new JButton("Nova Assinatura");
-        btAdd.addActionListener(e -> adicionaAssinatura(cliente));
+        btAdd.addActionListener(e -> adicionaAssinatura(cliente, cAssinaturasVM));
         linha2.add(btAdd);
 
         painel.add(linha1);
         painel.add(linha2);
         return painel;
     }
-    public void adicionaAssinatura(Cliente clienteClicado){
+    public void adicionaAssinatura(Cliente clienteClicado, CatalogoAssinaturasViewModel cAssinaturasVM){
         Aplicativo app = (Aplicativo) appsSelecionaveis.getSelectedItem();
         try {
             int codigoAssinatura = Integer.parseInt(tfCodigoAssinatura.getText());
@@ -210,6 +210,7 @@ public class App {
             }else{
                 Assinatura novaAssinatura = new Assinatura(clienteClicado, app, codigoAssinatura, inicioVigencia);
                 catAssinaturas.cadastra(novaAssinatura);
+                cAssinaturasVM.fireTableDataChanged();
             }
         }
         catch (NumberFormatException e){

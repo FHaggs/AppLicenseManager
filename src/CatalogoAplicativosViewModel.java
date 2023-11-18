@@ -78,8 +78,6 @@ public class CatalogoAplicativosViewModel extends AbstractTableModel {
             }
 
         }
-
-        
         fireTableCellUpdated(row, col);
     }    
     private void erroDeFormato(){

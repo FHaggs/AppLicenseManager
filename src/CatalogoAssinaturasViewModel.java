@@ -4,19 +4,13 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class CatalogoAssinaturasViewModel extends AbstractTableModel {
     private CatalogoAssinaturas assinaturas;
-    private final String[] nomesDasColunas = {
-        "Codigo",
-        "Início Vigencia",
-        "Fim Vigência",
-        "Aplicativo",
-        "Valor assinatura"
-    };
+    private final String[] nomesDasColunas;
     boolean chamadaDoCliente;
 
     public CatalogoAssinaturasViewModel(CatalogoAssinaturas assinaturas, boolean chamadaDoCliente){
         this.assinaturas = assinaturas;
         this.chamadaDoCliente = chamadaDoCliente;
-        /* 
+        
         if(chamadaDoCliente){
             String[] nomesDasColunasCliente = {
                 "Codigo",
@@ -34,7 +28,7 @@ public class CatalogoAssinaturasViewModel extends AbstractTableModel {
                 "Fim Vigência"
             };
             nomesDasColunas = nomesDasColunasCliente;
-        } */
+        } 
     }
     public String getColumnName(int col) {
         return nomesDasColunas[col];
