@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractCellEditor;
-import javax.swing.JOptionPane;
 import javax.swing.table.TableCellEditor;
 
 class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {

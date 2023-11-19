@@ -74,4 +74,8 @@ public class Aplicativo {
     public String toString(){
         return nome;
     }
+    public double valorAssinaturas(){
+        return assinaturas.stream().mapToDouble(a -> a.getAplicativo().getPreco()).sum();
+    }
+
 }

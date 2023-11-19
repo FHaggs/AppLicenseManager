@@ -2,11 +2,13 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -290,9 +292,41 @@ public class App {
         btAdd.addActionListener(e -> adicionaCliente());
         linha2.add(btAdd);
 
+
+        JButton btFat = new JButton("Pagantes");
+        btFat.addActionListener(e -> viewPagantes());
+        linha2.add(btFat);
+
         painel.add(linha1);
         painel.add(linha2);
         return painel;
+    }
+
+    public void viewPagantes(){
+
+        CatalogoClientes clientesPag = new CatalogoClientes(null);
+
+        List<Cliente> listaClientesPag = catClientes.getStream().filter(c -> c.isPagante()).toList();
+        clientesPag.setItens(listaClientesPag);
+
+        CatalogoClientesPagantesViewModel catClientesPagVM = new CatalogoClientesPagantesViewModel(clientesPag);
+
+        JTable tabela = new JTable(catClientesPagVM);
+        tabela.setFillsViewportHeight(true);
+
+
+        JScrollPane scrollPane = new JScrollPane(tabela, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+
+
+        
+
+        JFrame frame = new JFrame("Pagantes");
+        frame.add(scrollPane);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     public void adicionaCliente() {
@@ -334,9 +368,42 @@ public class App {
         btAdd.addActionListener(e -> adicionaApp());
         linha2.add(btAdd);
 
+        JButton btFat = new JButton("Faturamento");
+        btFat.addActionListener(e -> viewFaturamento());
+        linha2.add(btFat);
+
+
         painel.add(linha1);
         painel.add(linha2);
         return painel;
+    }
+    public void viewFaturamento(){
+        double faturamentoTotal;
+        double faturamentoIOS;
+        double faturamentoAndroid;
+       
+
+        faturamentoTotal = catApps.getStream().mapToDouble(a -> a.valorAssinaturas()).sum();
+        faturamentoIOS = catApps.getStream().filter(a -> a.getSo().equals(Aplicativo.SO.IOS)).mapToDouble(a -> a.valorAssinaturas()).sum();
+        faturamentoAndroid = catApps.getStream().filter(a -> a.getSo().equals(Aplicativo.SO.Android)).mapToDouble(a -> a.valorAssinaturas()).sum();
+        
+        JFrame frame = new JFrame("Faturamento");
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+        JLabel linha1 = new JLabel("Total: R$" + faturamentoTotal);
+        JLabel linha2 = new JLabel("IOS: R$" + faturamentoIOS);
+        JLabel linha3 = new JLabel("Android: R$" + faturamentoAndroid);
+        frame.add(linha1);
+        frame.add(linha2);
+        frame.add(linha3);
+
+        Font biggerFont = new Font("Arial", Font.PLAIN, 20);
+        linha1.setFont(biggerFont);
+        linha2.setFont(biggerFont);
+        linha3.setFont(biggerFont);
+
+        frame.setSize(300,200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     public void adicionaApp() {

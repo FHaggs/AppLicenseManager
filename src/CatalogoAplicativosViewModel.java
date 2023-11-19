@@ -12,7 +12,7 @@ public class CatalogoAplicativosViewModel extends AbstractTableModel {
         "Nome",
         "Preco",
         "Sist. Operacional",
-        "Ver assinaturas"
+        "Assinantes"
     };
 
     public CatalogoAplicativosViewModel(CatalogoAplicativos aplicativos){
@@ -37,7 +37,7 @@ public class CatalogoAplicativosViewModel extends AbstractTableModel {
             case 1 : return (Object)(app.getNome());
             case 2 : return (Object)(app.getPreco());
             case 3 : return (Object)(app.getSo());   
-            case 4 : return (Object)("Ver assinaturas");     
+            case 4 : return (Object)("Assinantes");     
             default: return (Object)"none";
         }
     }

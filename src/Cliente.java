@@ -47,6 +47,17 @@ public class Cliente {
     public void addAssinaturas(Assinatura assinatura) {
         this.assinaturas.add(assinatura);
     }
+    public boolean isPagante(){
+        for(Assinatura a : assinaturas){
+            if(a.isAtiva()){
+                return true;
+            }
+        }
+        return false;
+    }
+    public double valorMensalAss(){
+        return assinaturas.stream().filter(a -> a.isAtiva()).mapToDouble(a -> a.getAplicativo().getPreco()).sum();
+    }
     
 
     
