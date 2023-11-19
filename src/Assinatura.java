@@ -64,7 +64,7 @@ public class Assinatura {
     public String toLineFile(){
         return codigoAssinatura+","+cliente.getCpf()+","+aplicativo.getCodigo()+","+inicioVigencia+","+fimVigencia;
     }
-
+    
     public static Assinatura fromLineFile(String line, CatalogoClientes catClientes, CatalogoAplicativos catApps){
         String[] tokens = line.split(",");
         int codigoAssinatura = Integer.parseInt(tokens[0]);
