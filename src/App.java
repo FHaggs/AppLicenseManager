@@ -60,10 +60,12 @@ public class App {
         catAppsVM = new CatalogoAplicativosViewModel(catApps);
         JTable tabela = new JTable(catAppsVM);
         tabela.setFillsViewportHeight(true);
+        tabela.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         catClientesVM = new CatalogoClientesViewModel(catClientes);
         JTable tabelaClientes = new JTable(catClientesVM);
         tabelaClientes.setFillsViewportHeight(true);
+        
 
         JFrame frame = new JFrame("Gestão de Apps");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,8 +90,15 @@ public class App {
 
         // Mudar o editor da tabela para poder editar SO com dropdown
         TableColumn columnSo = tabela.getColumnModel().getColumn(3);
+        columnSo.setPreferredWidth(140);
         columnSo.setCellEditor(new SOCellEditor());
         columnSo.setCellRenderer(new SOCellRenderer());
+
+        //Arrumar coluna Faturamento
+        TableColumn columnFaturamento = tabela.getColumnModel().getColumn(5);
+        columnFaturamento.setPreferredWidth(100);
+        TableColumn columnNomeApp = tabela.getColumnModel().getColumn(1);
+        columnNomeApp.setPreferredWidth(150);
 
         // Layout
 
@@ -114,7 +123,7 @@ public class App {
         TableColumn columnVerAssinaturas = tabelaClientes.getColumnModel().getColumn(3);
         columnVerAssinaturas.setCellRenderer(new ButtonRenderer());
         columnVerAssinaturas.setCellEditor(new ButtonEditor());
-
+        columnVerAssinaturas.setPreferredWidth(100); 
         tabelaClientes.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int column = tabelaClientes.getColumnModel().getColumnIndexAtX(e.getX());
@@ -138,6 +147,8 @@ public class App {
 
         // Botao da tabela apps
         TableColumn columnVerAssinaturasApps = tabela.getColumnModel().getColumn(4);
+        columnVerAssinaturasApps.setPreferredWidth(130); 
+
         columnVerAssinaturasApps.setCellRenderer(new ButtonRenderer());
         columnVerAssinaturasApps.setCellEditor(new ButtonEditor());
 
@@ -155,7 +166,6 @@ public class App {
                         // Pegar o cliente da row
                         Aplicativo appClicado = catApps.getCodigoAplicativo(cod);
                         painelAssinaturaApp(appClicado);
-                        //clienteClicado.getAssinaturas().stream().forEach(a -> System.out.println(a.getCodigoAssinatura()));
                     }
                     
                 }
@@ -170,12 +180,13 @@ public class App {
 
         contentPane.add(rightPanel);
 
-        //
 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
+
      public void painelAssinaturaApp(Aplicativo appClicado){
         JFrame frame = new JFrame(appClicado.getNome());
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
@@ -263,6 +274,7 @@ public class App {
                 Assinatura novaAssinatura = new Assinatura(clienteClicado, app, codigoAssinatura, inicioVigencia);
                 catAssinaturas.cadastra(novaAssinatura);
                 cAssinaturasVM.fireTableDataChanged();
+                catAppsVM.fireTableDataChanged();
             }
         }
         catch (NumberFormatException e){
