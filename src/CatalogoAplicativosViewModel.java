@@ -1,4 +1,7 @@
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
 import static javax.swing.JOptionPane.showMessageDialog;
 
 
@@ -8,7 +11,8 @@ public class CatalogoAplicativosViewModel extends AbstractTableModel {
         "Codigo",
         "Nome",
         "Preco",
-        "Sist. Operacional"
+        "Sist. Operacional",
+        "Ver assinaturas"
     };
 
     public CatalogoAplicativosViewModel(CatalogoAplicativos aplicativos){
@@ -32,14 +36,15 @@ public class CatalogoAplicativosViewModel extends AbstractTableModel {
             case 0 : return (Object)(app.getCodigo());
             case 1 : return (Object)(app.getNome());
             case 2 : return (Object)(app.getPreco());
-            case 3 : return (Object)(app.getSo());        
+            case 3 : return (Object)(app.getSo());   
+            case 4 : return (Object)("Ver assinaturas");     
             default: return (Object)"none";
         }
     }
     
     public boolean isCellEditable(int row, int col)
         { 
-            return true;
+            return col == 0 || col == 1 || col == 2 || col == 3;
 
         }
 
@@ -82,5 +87,19 @@ public class CatalogoAplicativosViewModel extends AbstractTableModel {
     }    
     private void erroDeFormato(){
         showMessageDialog(null, "Formato inválido");
+    }
+     public TableCellRenderer getTableCellRenderer(int row, int column) {
+        if (column == 4) {
+            return new ButtonRenderer();
+        }
+        return getTableCellRenderer(row, column);
+    }
+
+    // Define um editor para a célula da coluna "Ver assinaturas"
+    public TableCellEditor getTableCellEditor(int row, int column) {
+        if (column == 4) {
+            return new ButtonEditor();
+        }
+        return getTableCellEditor(row, column);
     }
 }
