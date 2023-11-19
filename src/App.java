@@ -133,6 +133,32 @@ public class App {
                 }
             }
         });
+
+        // Botao da tabela apps
+        TableColumn columnVerAssinaturasApps = tabela.getColumnModel().getColumn(4);
+        columnVerAssinaturasApps.setCellRenderer(new ButtonRenderer());
+        columnVerAssinaturasApps.setCellEditor(new ButtonEditor());
+
+        tabela.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int column = tabela.getColumnModel().getColumnIndexAtX(e.getX());
+                int row = e.getY() / tabela.getRowHeight();
+    
+                // Check if the click is within the "Ver assinaturas" column
+                if (row < tabela.getRowCount() && column == 4) {
+                    // Pegar valor do codigo do app
+                    Object codigoValue = tabela.getValueAt(row, 0);
+                    if (codigoValue != null) { // Evitar bugs
+                        Integer cod = (Integer) codigoValue;
+                        // Pegar o cliente da row
+                        Aplicativo appClicado = catApps.getCodigoAplicativo(cod);
+                        painelAssinaturaApp(appClicado);
+                        //clienteClicado.getAssinaturas().stream().forEach(a -> System.out.println(a.getCodigoAssinatura()));
+                    }
+                    
+                }
+            }
+        });
         
 
         JPanel jpNovoCliente = criaPainelNovoCliente();
@@ -148,6 +174,30 @@ public class App {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+     public void painelAssinaturaApp(Aplicativo appClicado){
+        JFrame frame = new JFrame(appClicado.getNome());
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+        
+        CatalogoAssinaturas catAssinaturasCliente = new CatalogoAssinaturas(appClicado.getAssinaturas());
+        
+
+        CatalogoAssinaturasViewModel catAssinaturasVM = new CatalogoAssinaturasViewModel(catAssinaturasCliente, false);
+        JTable tabelaAssinatura = new JTable(catAssinaturasVM);
+        tabelaAssinatura.setFillsViewportHeight(true);
+
+        
+        JScrollPane scrollPane = new JScrollPane(tabelaAssinatura, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        
+
+
+        frame.add(scrollPane);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+     }
+
     public void painelAssinatura(Cliente clienteClicado){
         JFrame frame = new JFrame(clienteClicado.getNome());
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
